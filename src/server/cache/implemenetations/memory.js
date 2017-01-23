@@ -1,24 +1,28 @@
+import {isNumber} from 'lodash'
+
 class MemoryCache {
-    constructor(config) {
+    constructor() {
         this.cache = {};
     }
 
-    static get deps() {
-        return ['config'];
-    }
-
     get(key) {
-        const item = this.cache.hasOwnProperty(key);
-        return item ? this.cache[item] : null;
+        const exists = this.cache.hasOwnProperty(key);
+        return exists ? this.cache[key] : null;
     }
 
-    set(key) {
-
+    set(key, value) {
+        this.cache[key] = value;
+        return value;
     }
 
     increment(key, amount) {
-        const item = this.get(key);
-
+        const value = this.get(key);
+        if(!isNumber(value)) {
+            throw new Error(`${value} is not a number`)
+        }
+        const newValue = value + amount;
+        this.set(key, newValue);
+        return newValue;
     }
 }
 
