@@ -1,4 +1,4 @@
-import {isNumber} from 'lodash'
+import { isNumber } from 'lodash'
 
 const Redis = require('ioredis');
 
@@ -12,7 +12,7 @@ class RedisCache {
     }
 
     async set(key, value) {
-        return this.cache.set(key, value).then(function(result){
+        return this.cache.set(key, value).then(function (result) {
             if (result === 'OK') {
                 return value;
             }
@@ -22,7 +22,7 @@ class RedisCache {
     // redis has an internal increment command but where??? everything is stringish
     async increment(key, amount) {
         var value = parseInt(await this.get(key), 10);
-        if(!isNumber(value)) {
+        if (!isNumber(value)) {
             throw new Error(`${value} is not a number`)
         }
         const newValue = value + amount;
