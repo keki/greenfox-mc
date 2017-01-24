@@ -1,4 +1,4 @@
-/*global describe,beforeAll,expect,it */
+/*global describe,beforeAll,afterAll,expect,it */
 "use strict";
 
 import RedisCache from './redis'
@@ -9,6 +9,10 @@ describe('cache-redis', function () {
 
     beforeAll(function () {
         redis = new RedisCache();
+    });
+
+    afterAll(async function () {
+        // shall we reset the db somehow?
     });
 
     it('should get null if cache is empty', async function () {
