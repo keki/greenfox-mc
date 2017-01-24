@@ -19,11 +19,11 @@ class RedisCache {
         });
     }
 
-    // redis has an internal increment command but where??? everything is stringish
+    // redis has an internal increment command but where??? simple values are stringish
     async increment(key, amount) {
         var value = parseInt(await this.get(key), 10);
-        if (!isNumber(value)) {
-            throw new Error(`${value} is not a number`)
+        if (isNaN(value)) {
+            return `${key} is not a number`;
         }
         const newValue = value + amount;
         this.set(key, newValue);

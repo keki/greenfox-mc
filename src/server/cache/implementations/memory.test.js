@@ -40,6 +40,6 @@ describe('cache-memory', function() {
 		memory.set("foo", "bar");
 		expect(() => {
 			memory.increment("foo", 2)
-		}).toThrowError("bar is not a number");
+		}).toThrowError("foo is not a number");
 	});
 });
