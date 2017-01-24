@@ -1,5 +1,3 @@
-import { isNumber } from 'lodash'
-
 const Redis = require('ioredis');
 
 class RedisCache {
