@@ -5,7 +5,9 @@ const path = process.env.npm_package_config_redis_path
 
 class RedisCache {
     constructor() {
-        this.cache = new Redis(port, path);
+        this.cache = new Redis(port, path, {
+            showFriendlyErrorStack: true
+        });
     }
 
     async get(key) {
@@ -20,15 +22,12 @@ class RedisCache {
         });
     }
 
-    // redis has an internal increment command but where??? simple values are stringish
     async increment(key, amount = 1) {
-        return this.cache.incrby(key, amount).then(function (error) {
-            if (error) {
-                return 'type mismatch'
-            } else {
-                key + 1
-            }
-        });
+        try {
+            return await this.cache.incrby(key, amount);
+        } catch (e) {
+            return `${e}`
+        }
     }
 
 }
