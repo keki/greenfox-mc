@@ -21,14 +21,14 @@ class RedisCache {
     }
 
     // redis has an internal increment command but where??? simple values are stringish
-    async increment(key, amount) {
-        var value = parseInt(await this.get(key), 10);
-        if (isNaN(value)) {
-            return `${key} is not a number`;
-        }
-        const newValue = value + amount;
-        this.set(key, newValue);
-        return newValue;
+    async increment(key, amount = 1) {
+        return this.cache.incrby(key, amount).then(function (error) {
+            if (error) {
+                return 'type mismatch'
+            } else {
+                key + 1
+            }
+        });
     }
 
 }

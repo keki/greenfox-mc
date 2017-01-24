@@ -1,4 +1,4 @@
-import {isNumber} from 'lodash'
+import { isNumber } from 'lodash'
 
 class MemoryCache {
     constructor() {
@@ -17,7 +17,7 @@ class MemoryCache {
 
     increment(key, amount) {
         const value = this.get(key);
-        if(!isNumber(value)) {
+        if (!isNumber(value)) {
             throw new Error(`${key} is not a number`)
         }
         const newValue = value + amount;
