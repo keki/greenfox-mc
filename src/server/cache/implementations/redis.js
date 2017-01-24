@@ -1,8 +1,11 @@
 const Redis = require('ioredis');
 
+const port = process.env.npm_package_config_redis_port
+const path = process.env.npm_package_config_redis_path
+
 class RedisCache {
     constructor() {
-        this.cache = new Redis(6379, '127.0.0.1');
+        this.cache = new Redis(port, path);
     }
 
     async get(key) {
