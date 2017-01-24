@@ -38,7 +38,14 @@ describe('cache-redis', function () {
         expect(value).toBe("baz");
     });
 
-    it('should be able to increment numeric values', async function () {
+    it('should be able to increment by default value', async function () {
+        await redis.set("qux", 1);
+        await redis.increment("qux");
+        const value = await redis.get("qux");
+        expect(parseInt(value), 10).toBe(2);
+    });
+
+    it('should be able to increment explicit values', async function () {
         await redis.set("qux", 1);
         await redis.increment("qux", 2);
         const value = await redis.get("qux");
@@ -48,6 +55,6 @@ describe('cache-redis', function () {
     it('should not be able to increment non-numeric values', async function () {
         await redis.set("foo", "bar");
         const value = await redis.increment("foo", 2)
-        expect(value).toBe('foo is not a number');
+        expect(value).toContain('value is not an integer or out of range');
     });
 });
