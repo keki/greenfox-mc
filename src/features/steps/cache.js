@@ -7,10 +7,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 export default function () {
-    this.When(/^I increment an undefined value$/, function () {
+    this.When(/^I increment a null value$/, async function () {
         this.context.cache = this.container.get('cache');
 
-        return this.context.cache.increment('mango', 1);
+        await this.context.cache.set('mango', null);
+        await this.context.cache.increment('mango', 1);
     });
 
     this.Then(/^I should get (\d+)$/, function (text) {

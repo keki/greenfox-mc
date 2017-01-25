@@ -12,11 +12,11 @@ describe('cache-redis', function () {
     });
 
     afterAll(async function () {
-        // shall we reset the db somehow?
+        redis.cache.flushdb();
     });
 
     it('should get null if cache is empty', async function () {
-        const value = await redis.get('alwaysnull');
+        const value = await redis.get('foo');
         expect(value).toBe(null);
     });
 
