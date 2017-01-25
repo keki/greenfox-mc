@@ -1,5 +1,5 @@
 function cache(container) {
-    const implementation = container.get('config').get(cache.serviceName);
+    const implementation = process.env.CACHE_STORE || 'memory';
     return container.getImplementation(cache.serviceName, implementation);
 }
 

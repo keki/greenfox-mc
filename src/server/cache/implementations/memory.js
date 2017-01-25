@@ -16,7 +16,7 @@ class MemoryCache {
     }
 
     async increment(key, amount = 1) {
-        const value = await this.get(key);
+        const value = (await this.get(key)) || 0;
         if (!isNumber(value)) {
             return `${key} is not a number`;
         }
