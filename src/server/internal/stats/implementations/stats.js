@@ -11,19 +11,15 @@ function Stats() {
     }
 
     function getStatistic() {
-
-
-       let totalIncomingRequests = Object.values(store).reduce((m, value) => m + value, 0)
-
         return {
-            totalIncomingRequests: totalIncomingRequests
+            totalIncomingRequests: Object.values(store).reduce((m, value) => m + value, 0)
         }
     }
 
-    return {
+    return Object.freeze({
         registerIncomingRequest,
         getStatistic
-    }
+    })
 
 }
 
