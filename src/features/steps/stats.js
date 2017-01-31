@@ -8,6 +8,7 @@ export default function () {
         let url, params, time;
         await stats.registerIncomingRequest(url, params, time);
     });
+    
 
     this.Then('I see totalIncomingRequests increases to "$value"', async function (total) {
         const stats = this.container.get('stats');
@@ -15,4 +16,4 @@ export default function () {
         expect(parseInt(total, 10)).to.eql(statistics.totalIncomingRequests);
     });
 
-};
+}
