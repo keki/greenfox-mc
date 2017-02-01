@@ -8,7 +8,7 @@ function Stats(cache) {
 
     function getStatistic() {
         return {
-            [KEY]: cache.get(KEY)
+            [KEY]: cache.get(KEY, 0)
         }
     }
 
