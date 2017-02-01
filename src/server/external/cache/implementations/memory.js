@@ -8,7 +8,7 @@ function MemoryCache () {
   let cache = {};
 
   function get(key, defaultValue) {
-    return _.get(cache, key, defaultValue);
+    return _.isUndefined(cache[key]) ? defaultValue : cache[key];
   }
 
   function increment(key, amount) {
@@ -22,7 +22,7 @@ function MemoryCache () {
         `[Cache] Can not increment key "${key}" with not a number value: ${amount}`
       )
     );
-    _.set(cache, key, get(key, 0) + amount);
+    cache[key] = get(key, 0) + amount;
   }
 
   function flushAll() {
