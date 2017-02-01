@@ -1,18 +1,12 @@
-function Stats() {
+function Stats(cache) {
 
-    const store = {}
-
-    function registerIncomingRequest(url, params, time) {
-        if (store[url]) {
-            store[url] += 1;
-        } else {
-            store[url] = 1
-        }
+    function registerIncomingRequest(url, /*params, time*/) {
+        cache.increment(url, 1)
     }
 
     function getStatistic() {
         return {
-            totalIncomingRequests: Object.values(store).reduce((m, value) => m + value, 0)
+            totalIncomingRequests: cache.reduce((result, value) => result + value, 0)
         }
     }
 
@@ -23,4 +17,5 @@ function Stats() {
 
 }
 
+Stats.deps = ['cache-memory'];
 module.exports = Stats;

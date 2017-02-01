@@ -29,10 +29,15 @@ function MemoryCache () {
     cache = {};
   }
 
+  function reduce(callback, accumulator) {
+    return _.reduce(cache, callback, accumulator);
+  }
+
   return Object.freeze({
     get: get,
     increment,
-    flushAll
+    flushAll,
+    reduce
   });
 }
 
