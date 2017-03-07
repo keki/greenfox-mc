@@ -13,6 +13,7 @@ export default function () {
 
     const queue = this.container.get('queue');
     await queue.remove('test-queue');
+    await queue.remove('request-statistic');
   });
 
 }
