@@ -12,14 +12,15 @@ app.use(bodyParser.json());
 
 app.use(async (req, res, next) => {
     const monitor = container.get('requestmonitor');
-    await monitor.registerIncomingRequest();
+    const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    await monitor.registerIncomingRequest(fullUrl);
     next();
   }
 );
 
 app.use('/stats', async (req, res, next) => {
-  const monitor = container.get('requestmonitor');
-  const result = await monitor.getStatistics()
+  const requestStatistic = container.get('requeststatistic');
+  const result = await requestStatistic.getStatistics()
   res.send(result);
 });
 

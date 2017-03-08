@@ -14,6 +14,18 @@ export default function () {
 
     this.context.promise = this.tools.getConsumePromise(queue, queueName, messageHandler);
   });
-}
+
+  this.When('the system recalculate the requests', async function () {
+    const requestStatistic = this.container.get('requeststatistic');
+    await requestStatistic.recalculate();
+  });
+
+  this.Then('I see "$value" for "$key" in the statistics', async function(value, key) {
+    const requestStatistic = this.container.get('requeststatistic');
+    const result = await requestStatistic.getStatistics();
+    expect(result[key]).to.eql(parseInt(value));
+  });
+
+ }
 
 
