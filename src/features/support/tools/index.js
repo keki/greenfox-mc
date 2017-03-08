@@ -15,6 +15,24 @@ function waitForElement(element, selector, callback, timeout) {
   }, interval);
 }
 
+async function getConsumePromise(queue, queueName, customMessageHandler) {
+  return new Promise((resolve, reject) => {
+    let messageCount = 0;
+    const messageHandler = async (message) => {
+      await customMessageHandler(message);
+      messageCount += 1;
+      const size = await queue.getMessageCount(queueName);
+      if (size === 0) {
+        resolve(messageCount);
+      }
+    }
+    queue.consume(queueName, messageHandler);
+  });
+}
+
+
+
 module.exports = Object.freeze({
-  waitForElement
+  waitForElement,
+  getConsumePromise
 });

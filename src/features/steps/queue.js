@@ -16,17 +16,7 @@ export default function () {
 
   this.When('A process consume the queue "$queueName"', async function (queueName) {
     const queue = this.container.get('queue');
-    this.context.promise = new Promise((resolve, reject) => {
-      let messageCount = 0;
-      const messageHandler = async () => {
-        messageCount += 1;
-        const size = await queue.getMessageCount(queueName);
-        if (size === 0) {
-          resolve(messageCount);
-        }
-      }
-      queue.consume(queueName, messageHandler);
-    });
+    this.context.promise = this.tools.getConsumePromise(queue, queueName, ()=>{});
   });
 
   this.Then('I see "$count" processed message', async function(count) {

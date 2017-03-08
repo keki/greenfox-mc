@@ -8,19 +8,11 @@ export default function () {
     const requestStatistic = this.container.get('requeststatistic');
     const queueName = 'request-statistic';
 
-    this.context.promise = new Promise((resolve, reject) => {
-      let messageCount = 0;
-      const messageHandler = async (message) => {
-        await requestStatistic.processMessage(message);
-        messageCount += 1;
-        const size = await queue.getMessageCount(queueName);
-        if (size === 0) {
-          resolve(messageCount);
-        }
-      }
-      queue.consume(queueName, messageHandler);
-    });
+    const messageHandler = async (message) => {
+      await requestStatistic.processMessage(message);
+    }
 
+    this.context.promise = this.tools.getConsumePromise(queue, queueName, messageHandler);
   });
 }
 
