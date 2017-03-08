@@ -1,5 +1,7 @@
 const diTools = require('lab-di/tools')();
 const path = require('path');
+require("babel-core/register");
+require("babel-polyfill");
 
 const di = diTools.getDI();
 di.registerModule(require('lab-config'), 'config');
