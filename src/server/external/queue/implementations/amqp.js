@@ -29,10 +29,16 @@ function AMQP() {
     return channel.deleteQueue(queueName);
   }
 
-  async function publish(queueName, message) {
+  async function publishToQueue(queueName, message) {
     const channel = await getChannel();
     await channel.assertQueue(queueName);
     return channel.sendToQueue(queueName, encode(message));
+  }
+
+  async function publish(exchangeName, message) {
+    const channel = await getChannel();
+    await channel.assertExchange(exchangeName, 'fanout', {durable: false});
+    return channel.publish(exchangeName, '', message);
   }
 
   async function consume(queueName, callback) {
@@ -42,9 +48,19 @@ function AMQP() {
     return channel.consume(queueName, handleMessage(channel, callback));
   }
 
+  async function bind(exchangeName, queueName) {
+    const channel = await getChannel();
+    await channel.assertExchange(exchangeName, 'fanout', {durable: false});
+    return channel.assertQueue(queueName, {exclusive: true}, function (error, q) {
+      channel.bindQueue(q.queue, exchangeName, '');
+    });
+  }
+
   return Object.freeze({
     publish,
+    publishToQueue,
     consume,
+    bind,
     remove,
     getMessageCount
   });

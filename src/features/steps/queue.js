@@ -3,9 +3,9 @@
 import { expect } from 'chai';
 
 export default function () {
-  this.When('I publish "$message" message to queue "$queue"', async function (message, queueName) {
+  this.When('I publish "$message" message to queue "$queueName"', async function (message, queueName) {
     const queue = this.container.get('queue');
-    await queue.publish(queueName, message);
+    await queue.publishToQueue(queueName, message);
   });
 
   this.Then('"$queueName" queue contains "$count" message', async function(queueName, count) {
@@ -23,4 +23,15 @@ export default function () {
     const messageCount = await this.context.promise;
     expect(messageCount).to.be.eql(parseInt(count));
   });
+
+  this.Given('I bind "$queueName" to exchange "$exchangeName"', async function (queueName, exchangeName) {
+    const queue = this.container.get('queue');
+    await queue.bind(exchangeName, queueName);
+  });
+
+  this.When('I publish "$message" message to exchange "$exchangeName"', async function (message, exchangeName) {
+    const queue = this.container.get('queue');
+    await queue.publish(exchangeName, message);
+  });
+
 }

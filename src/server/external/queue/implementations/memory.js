@@ -6,6 +6,31 @@ import VError from 'verror';
 
 function MemoryQueue () {
   let queue = {};
+  let exchanges = {};
+
+  function getMessageCount(queueName) {
+    return Promise.resolve(queue[queueName].length);
+  }
+
+  function remove(queueName) {
+    delete queue[queueName];
+  }
+
+  function publishToQueue(queueName, message) {
+    if (!queue.hasOwnProperty(queueName)) {
+      queue[queueName] = [];
+    }
+    queue[queueName].push(message);
+  }
+
+  function publish(exchangeName, message) {
+    if (!exchanges.hasOwnProperty(exchangeName)) {
+      exchanges[exchangeName] = [];
+    }
+    exchanges[exchangeName].forEach((queueName) => {
+      publishToQueue(queueName, message);
+    });
+  }
 
   function consume(queueName, callback) {
     async function handleMessages() {
@@ -20,25 +45,20 @@ function MemoryQueue () {
     return true;
   }
 
-
-  function publish(queueName, message) {
-    if (!queue.hasOwnProperty(queueName)) {
-      queue[queueName] = [];
+  function bind(exchangeName, queueName) {
+    if (!exchanges.hasOwnProperty(exchangeName)) {
+      exchanges[exchangeName] = [];
     }
-    queue[queueName].push(message);
-  }
-
-  function getMessageCount(queueName) {
-    return Promise.resolve(queue[queueName].length);
-  }
-
-  function remove(queueName) {
-    delete queue[queueName];
+    if (!exchanges[exchangeName].includes(queueName)) {
+      exchanges[exchangeName].push(queueName);
+    }
   }
 
   return Object.freeze({
     publish,
+    publishToQueue,
     consume,
+    bind,
     remove,
     getMessageCount
   });
