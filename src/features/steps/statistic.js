@@ -2,17 +2,25 @@
 
 import { expect } from 'chai';
 
+const EXCHANGE_NAME = 'requests';
+const QUEUE_NAME = 'request-statistic';
+
 export default function () {
+
+  this.Given('request statistics is initialized', function () {
+    const queue = this.container.get('queue');
+    queue.bind(EXCHANGE_NAME, QUEUE_NAME);
+  });
+
   this.When('the request statistic is calculated', async function () {
     const queue = this.container.get('queue');
     const requestStatistic = this.container.get('requeststatistic');
-    const queueName = 'request-statistic';
 
     const messageHandler = async (message) => {
       await requestStatistic.processMessage(message);
     }
 
-    this.context.promise = this.tools.getConsumePromise(queue, queueName, messageHandler);
+    this.context.promise = this.tools.getConsumePromise(queue, QUEUE_NAME, messageHandler);
   });
 
   this.When('the system recalculate the requests', async function () {

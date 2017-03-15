@@ -11,7 +11,7 @@ function RequestMonitor(store, queue) {
       }`,
       {url}
     );
-    await queue.publishToQueue('request-statistic', url);
+    await queue.publish('requests', url);
   }
 
   async function getRequests() {
