@@ -2,10 +2,15 @@ const CACHE_KEY_NAME = 'maliciousRequests';
 
 function Security(cache, queue) {
 
-  async function processMessage(message) {
-    if (message == "/iamahacker") {
-      await cache.increment(CACHE_KEY_NAME, 1);
-    }
+  //This can go to an executing task but no idea where it is supposed to live
+  async function reportIfMalicious(url, logger) {
+    if (url == "/iamahacker") { await logger(url); }
+  }
+
+  function processMessage(message) {
+    reportIfMalicious(message, (url) => {
+      cache.increment(CACHE_KEY_NAME, 1);
+    });
   }
 
   async function getStatistics() {
