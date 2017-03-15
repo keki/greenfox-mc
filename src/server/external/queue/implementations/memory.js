@@ -34,7 +34,11 @@ function MemoryQueue () {
 
   function consume(queueName, callback) {
     async function handleMessages() {
-      const message = queue[queueName].shift();
+      const thisQueue = queue[queueName]
+      if (!thisQueue) {
+        return false;
+      }
+      const message = thisQueue.shift();
       if (!message) {
         return false;
       }
